@@ -178,6 +178,13 @@ class MediaException extends Exception
      */
     const EXCEPTION_CODE_STORAGE_ADAPTER_NOT_FOUND = 5023;
 
+    /**
+     * A file with this name exists.
+     *
+     * @var int
+     */
+    const EXCEPTION_FILE_WRITE_ERROR = 5024;
+
     public function toArray()
     {
         return array(

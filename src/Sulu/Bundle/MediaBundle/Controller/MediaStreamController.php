@@ -107,11 +107,10 @@ class MediaStreamController extends Controller
         $mimeType = $fileVersion->getMimeType();
         $storageName = $fileVersion->getStorageName();
 
-        $path = $this->getStorageManager()->load($storageOptions, $storageName);
+        $handle = $this->getStorageManager()->load($storageOptions, $storageName);
 
-        $response = new StreamedResponse(function () use ($path) {
+        $response = new StreamedResponse(function () use ($handle) {
             flush(); // send headers
-            $handle = fopen($path, 'r');
             while (!feof($handle)) {
                 $buffer = fread($handle, 1024);
                 echo $buffer;
