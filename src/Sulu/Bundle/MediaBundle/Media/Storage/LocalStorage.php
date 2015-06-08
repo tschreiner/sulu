@@ -78,7 +78,7 @@ class LocalStorage extends AbstractStorage
         $this->addStorageOption('segment', $segment);
         $this->addStorageOption('fileName', $fileName);
 
-        return json_encode($this->storageOption);
+        return json_encode($this->storageOptions);
     }
 
     /**
