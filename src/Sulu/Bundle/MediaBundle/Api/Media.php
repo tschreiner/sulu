@@ -443,6 +443,16 @@ class Media extends ApiWrapper
     }
 
     /**
+     * @param string $storageName
+     *
+     * @return $this
+     */
+    public function setStorageName($storageName)
+    {
+        return $this->getFileVersion()->setStorageName($storageName);
+    }
+
+    /**
      * @param string $storageOptions
      *
      * @return $this
