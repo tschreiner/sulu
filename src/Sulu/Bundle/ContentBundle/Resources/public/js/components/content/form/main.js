@@ -454,16 +454,17 @@ define(['app-config', 'sulucontent/components/content/preview/main'], function(A
         },
 
         startCollaborationComponent: function() {
-            var $container = this.sandbox.dom.createElement('<div id="content-column-collaboration"/>');
-            this.$el.append($container);
+            var $container = this.sandbox.$el.find('#content-column-collaboration');
+
             this.sandbox.start([
                 {
-                    name: 'content/collaboration-message@sulucontent',
+                    name: 'content/collaboration@sulucontent',
                     options: {
                         el: $container,
                         id: this.options.id,
                         webspace: this.options.webspace,
-                        userId: AppConfig.getUser().id
+                        userId: AppConfig.getUser().id,
+                        type: 'page'
                     }
                 }
             ]);

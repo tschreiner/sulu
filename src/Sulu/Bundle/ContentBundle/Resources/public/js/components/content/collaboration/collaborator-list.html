@@ -1,0 +1,7 @@
+<ul>
+    <% _.each(collaborators, function(collaborator) { %>
+        <% if (collaborator.id !== authUserId) { %>
+        <li><%= collaborator.id %></li>
+        <% } %>
+    <% }) %>
+</ul>
