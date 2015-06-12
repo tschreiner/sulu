@@ -18,19 +18,28 @@ use Sulu\Bundle\MediaBundle\Api\Media;
 interface ServiceInterface
 {
     /**
+     * Send add external media request
+     *
      * @param Media[] $media
+     *
      * @return boolean
      */
     public function add(array $media);
 
     /**
+     * Send update external media request
+     *
      * @param Media[] $media
+     *
      * @return boolean
      */
     public function update(array $media);
 
     /**
+     *  Send delete external media request  
+     *
      * @param Media[] $media
+     *
      * @return boolean
      */
     public function delete(array $media);

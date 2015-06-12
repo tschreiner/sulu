@@ -4,12 +4,15 @@ namespace Sulu\Bundle\MediaBundle\Media\Service;
 
 use Sulu\Bundle\MediaBundle\Api\Media;
 use Guzzle\Http\Client;
+use Guzzle\Http\Exception\BadResponseException;
 
 class ExternalService implements ServiceInterface
 {
     protected $externalService = array();
 
     protected $serializer;
+
+    protected $logger;
 
     protected $client;
 
@@ -18,20 +21,41 @@ class ExternalService implements ServiceInterface
      */
     public function __construct(
         $externalService,
-        $serializer
+        $serializer,
+        $logger
     ) {
         $this->externalService = $externalService;
         $this->serializer = $serializer;
+        $this->logger = $logger;
         $this->client = new Client();
     }
 
+    /**
+     * send HTTP request
+     *
+     * @param Media $media
+     * @param String $action
+     * @param String $HTTPmethod
+     *
+     */
     private function makeRequest($JSONstring, $action, $HTTPmethod)
     {
         foreach ($this->externalService as $key => $value) {
-            $request = $this->client->$HTTPmethod($value[$action]);
-            $request->setBody($JSONstring, 'application/json');
-            $res = $request->send();
-            echo $res->getStatusCode();
+        	try 
+        	{
+            	$request = $this->client->$HTTPmethod($value[$action]);
+            	$request->setBody($JSONstring, 'application/json');
+            	$res = $request->send();
+        	} catch (BadResponseException $e) 
+        	{
+        		$this->logger->error(
+        			sprintf(
+        				'External Service Notification send error: %s %s',
+        				$e->getResponse()->getStatusCode(), 
+        				$value[$action]
+        			)		
+    			);
+        	}
         }
     }
 
