@@ -46,7 +46,7 @@ define([
             this.client.addHandler(MESSAGE_HANDLER_NAME, function(data) {
                 switch (data.command) {
                     case 'update':
-                        this.onUpdate();
+                        this.onUpdate(data);
                         break;
                 }
             }.bind(this));
