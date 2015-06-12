@@ -8,7 +8,7 @@
         <parameter key="sulu_content.node_repository.class">Sulu\Bundle\ContentBundle\Repository\NodeRepository</parameter>
         <parameter key="sulu_content.rl_repository.class">Sulu\Bundle\ContentBundle\Repository\ResourceLocatorRepository</parameter>
         <parameter key="sulu_content.extension.seo.class">Sulu\Bundle\ContentBundle\Content\Structure\SeoStructureExtension</parameter>
-        <parameter key="sulu_content.collaboration.class">Sulu\Bundle\ContentBundle\Admin\CollaborationMessageHandler</parameter>
+        <parameter key="sulu_content.collaboration.class">Sulu\Bundle\ContentBundle\Collaboration\CollaborationMessageHandler</parameter>
         <parameter key="sulu_content.extension.excerpt.class">Sulu\Bundle\ContentBundle\Content\Structure\ExcerptStructureExtension</parameter>
         <parameter key="sulu_content.jsconfig.class">Sulu\Bundle\AdminBundle\Admin\JsConfig</parameter>
     </parameters>

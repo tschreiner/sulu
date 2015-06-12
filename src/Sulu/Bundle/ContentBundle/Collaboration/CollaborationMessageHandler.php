@@ -8,7 +8,7 @@
  * with this source code in the file LICENSE.
  */
 
-namespace Sulu\Bundle\ContentBundle\Admin;
+namespace Sulu\Bundle\ContentBundle\Collaboration;
 
 use Ratchet\ConnectionInterface;
 use Psr\Log\LoggerInterface;
@@ -31,6 +31,12 @@ class CollaborationMessageHandler implements MessageHandlerInterface
      * @var LoggerInterface
      */
     private $logger;
+
+    /**
+     * An array which contains all the users for a certain identifier (representing a page, product, ...)
+     * @var array
+     */
+    private $users = array();
 
     public function __construct(
         LoggerInterface $logger
@@ -75,7 +81,7 @@ class CollaborationMessageHandler implements MessageHandlerInterface
                 $result = $this->enter($conn, $context, $msg);
                 break;
             case 'leave':
-                $result = $this->leave($conn, $context);
+                $result = $this->leave($conn, $context, $msg);
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Command "%s" not known', $command));
@@ -93,15 +99,48 @@ class CollaborationMessageHandler implements MessageHandlerInterface
      * @param array $msg
      *
      * @return array
-     *
-     * @throws MissingParameterException
      */
     private function enter(ConnectionInterface $conn, MessageHandlerContext $context, $msg)
     {
-        $this->logger->warning('HELLO BABY');
+        // TODO check msg keys
+        $this->addUser($msg['type'] . $msg['id'], $msg['userId']);
 
         return array(
-            'command' => 'enter'
+            'type' => $msg['type'],
+            'id' => $msg['id'],
+            'users' => $this->users[$msg['type'] . $msg['id']]
         );
+    }
+
+    /**
+     * Called when the user has left the page.
+     *
+     * @param ConnectionInterface $conn
+     * @param MessageHandlerContext $context
+     * @param $msg
+     *
+     * @return array
+     */
+    private function leave(ConnectionInterface $conn, MessageHandlerContext $context, $msg)
+    {
+        $this->removeUser($msg['type'] . $msg['id'], $msg['userId']);
+    }
+
+    private function addUser($id, $userId)
+    {
+        if (!array_key_exists($id, $this->users)) {
+            $this->users[$id] = array();
+        }
+
+        if (!in_array($userId, $this->users[$id])) {
+            $this->users[$id][] = array('id' => $userId);
+        }
+    }
+
+    private function removeUser($id, $userId)
+    {
+        if ($key = array_search(array('id' => $userId), $this->users[$id])) {
+            unset($this->users[$id][$key]);
+        }
     }
 }
