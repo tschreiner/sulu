@@ -21,8 +21,28 @@ define(['app-config', 'config', 'websocket-manager'], function(AppConfig, Config
         initialize: function() {
             this.client = WebsocketManager.getClient(WEBSOCKET_APP_NAME, true);
 
-            var def = this.client.send(MESSAGE_HANDLER_NAME, {
-                command: 'enter'
+            this.sendEnterMessage();
+            this.onMessageHandler();
+        },
+
+        /**
+         * @method onMessageHandler
+         */
+        onMessageHandler: function() {
+            // this.client.onMessage(function(data) {
+            //     console.log(data);
+            // }.bind(this));
+        },
+
+        /**
+         * @method sendEnterMessage
+         */
+        sendEnterMessage: function() {
+            this.client.send(MESSAGE_HANDLER_NAME, {
+                command: 'enter',
+                id: this.options.id,
+                webspace: this.options.webspace,
+                userId: this.options.userId
             });
         }
     };
