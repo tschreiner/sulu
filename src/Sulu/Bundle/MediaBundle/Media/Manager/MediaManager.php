@@ -21,6 +21,7 @@ use Sulu\Bundle\MediaBundle\Entity\FileVersion;
 use Sulu\Bundle\MediaBundle\Entity\FileVersionMeta;
 use Sulu\Bundle\MediaBundle\Entity\Media as MediaEntity;
 use Sulu\Bundle\MediaBundle\Entity\MediaRepositoryInterface;
+use Sulu\Bundle\MediaBundle\Event\ApiMediaEvent;
 use Sulu\Bundle\MediaBundle\Media\Exception\CollectionNotFoundException;
 use Sulu\Bundle\MediaBundle\Media\Exception\FileVersionNotFoundException;
 use Sulu\Bundle\MediaBundle\Media\Exception\InvalidFileException;
@@ -34,6 +35,7 @@ use Sulu\Component\Rest\ListBuilder\Doctrine\FieldDescriptor\DoctrineFieldDescri
 use Sulu\Component\Rest\ListBuilder\Doctrine\FieldDescriptor\DoctrineJoinDescriptor;
 use Sulu\Component\Security\Authentication\UserInterface;
 use Sulu\Component\Security\Authentication\UserRepositoryInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -123,6 +125,11 @@ class MediaManager implements MediaManagerInterface
     public $count;
 
     /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    /**
      * @param MediaRepositoryInterface $mediaRepository
      * @param CollectionRepositoryInterface $collectionRepository
      * @param UserRepositoryInterface $userRepository
@@ -132,6 +139,7 @@ class MediaManager implements MediaManagerInterface
      * @param FormatManagerInterface $formatManager
      * @param TagManagerInterface $tagManager
      * @param TypeManagerInterface $typeManager
+     * @param EventDispatcherInterface $eventDispatcher
      * @param string $downloadPath
      * @param string $maxFileSize
      */
@@ -145,6 +153,7 @@ class MediaManager implements MediaManagerInterface
         FormatManagerInterface $formatManager,
         TagManagerInterface $tagManager,
         TypeManagerInterface $typeManager,
+        EventDispatcherInterface $eventDispatcher,
         $downloadPath,
         $maxFileSize
     ) {
@@ -156,6 +165,7 @@ class MediaManager implements MediaManagerInterface
         $this->validator = $validator;
         $this->formatManager = $formatManager;
         $this->typeManager = $typeManager;
+        $this->eventDispatcher = $eventDispatcher;
         $this->downloadPath = $downloadPath;
         $this->maxFileSize = $maxFileSize;
         $this->tagManager = $tagManager;
@@ -403,12 +413,21 @@ class MediaManager implements MediaManagerInterface
     public function save($uploadedFile, $data, $userId)
     {
         if (isset($data['id'])) {
+            $event = self::EVENT_POST_MEDIA_UPDATE;
             $media = $this->modifyMedia($uploadedFile, $data, $this->getUser($userId));
         } else {
+            $event = self::EVENT_POST_MEDIA_ADD;
             $media = $this->buildData($uploadedFile, $data, $this->getUser($userId));
         }
 
-        return $this->addFormatsAndUrl($media);
+        $media = $this->addFormatsAndUrl($media);
+
+        $this->eventDispatcher->dispatch(
+            $event,
+            new ApiMediaEvent($media)
+        );
+
+        return $media;
     }
 
     /**
@@ -739,6 +758,13 @@ class MediaManager implements MediaManagerInterface
 
         $this->em->remove($mediaEntity);
         $this->em->flush();
+
+        $this->eventDispatcher->dispatch(
+            self::EVENT_POST_MEDIA_DELETE,
+            new ApiMediaEvent(
+                new Media($mediaEntity)
+            )
+        );
     }
 
     /**

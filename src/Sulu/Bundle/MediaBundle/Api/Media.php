@@ -95,7 +95,7 @@ class Media extends ApiWrapper
      */
     protected $file = null;
 
-    public function __construct(Entity $media, $locale, $version = null)
+    public function __construct(Entity $media, $locale = null, $version = null)
     {
         $this->entity = $media;
         $this->locale = $locale;
