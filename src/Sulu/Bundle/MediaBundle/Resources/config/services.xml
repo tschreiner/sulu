@@ -140,11 +140,15 @@
             <tag name="kernel.event_subscriber" />
         </service>
 
-        <service id="sulu_media.media.service_manager" class="%sulu_media.media.service_manager.class%" />
+        <service id="sulu_media.media.service_manager" class="%sulu_media.media.service_manager.class%">
+            <argument type="service" id="logger" />
+        </service>
 
         <service id="sulu_media.external_service" class="%sulu_media.external_service.class%">
             <argument>%sulu_media.external_service%</argument>
             <argument type="service" id="jms_serializer" />
+
+            <tag name="sulu_media.media.service" alias="external_service" />
         </service>
     </services>
 </container>

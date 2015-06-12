@@ -18,20 +18,20 @@ use Sulu\Bundle\MediaBundle\Api\Media;
 interface ServiceInterface
 {
     /**
-     * @param Media $media
+     * @param Media[] $media
      * @return boolean
      */
-    public function add(Media $media);
+    public function add(array $media);
 
     /**
-     * @param Media $media
+     * @param Media[] $media
      * @return boolean
      */
-    public function update(Media $media);
+    public function update(array $media);
 
     /**
-     * @param Media $media
+     * @param Media[] $media
      * @return boolean
      */
-    public function delete(Media $media);
+    public function delete(array $media);
 }
