@@ -72,15 +72,13 @@ define([
          */
         onEnterResponse: function(handlerName, message) {
             console.log('collaboration', message);
-            this.renderCollaborators();
+            this.renderCollaborators(message.users);
         },
 
         /**
          * @method sendLeaveMessage
          */
         sendLeaveMessage: function() {
-            console.log('left');
-
             return this.client.send(MESSAGE_HANDLER_NAME, {
                 command: 'leave',
                 id: this.options.id,
@@ -95,7 +93,7 @@ define([
          * @param {Object} data
          */
         onUpdate: function(data) {
-            // update the view
+            this.renderCollaborators(data.users);
         },
 
         /**
@@ -103,7 +101,7 @@ define([
          * @param {Array} collaborators
          */
         renderCollaborators: function(collaborators) {
-            var template = this.sandbox.template(collaboratorListTpl, {
+            var template = this.sandbox.util.template(collaboratorListTpl, {
                 collaborators: collaborators,
                 authUserId: this.options.userId
             });

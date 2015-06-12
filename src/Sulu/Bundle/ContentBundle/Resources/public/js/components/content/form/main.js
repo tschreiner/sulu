@@ -68,7 +68,6 @@ define(['app-config', 'sulucontent/components/content/preview/main'], function(A
             // get content data
             this.sandbox.emit('sulu.content.contents.get-data', function(data) {
                 this.render(data);
-                this.startCollaborationComponent();
             }.bind(this));
         },
 
@@ -169,6 +168,8 @@ define(['app-config', 'sulucontent/components/content/preview/main'], function(A
             this.createForm(data).then(function() {
                 this.bindDomEvents();
                 this.changeTemplateDropdownHandler();
+
+                this.startCollaborationComponent();
             }.bind(this));
         },
 
@@ -454,7 +455,8 @@ define(['app-config', 'sulucontent/components/content/preview/main'], function(A
         },
 
         startCollaborationComponent: function() {
-            var $container = this.sandbox.$el.find('#content-column-collaboration');
+            var $container = this.sandbox.dom.createElement('<div id="content-column-collaboration"/>');
+            this.$el.prepend($container);
 
             this.sandbox.start([
                 {

@@ -132,7 +132,7 @@ class CollaborationMessageHandler implements MessageHandlerInterface
             $this->users[$id] = array();
         }
 
-        if (!in_array($userId, $this->users[$id])) {
+        if (!in_array(array('id' => $userId), $this->users[$id])) {
             $this->users[$id][] = array('id' => $userId);
         }
     }
