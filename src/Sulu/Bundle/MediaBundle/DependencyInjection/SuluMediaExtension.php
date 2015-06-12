@@ -72,6 +72,9 @@ class SuluMediaExtension extends Extension
         $container->setParameter('sulu_media.disposition_type.mime_types_inline', $config['disposition_type']['mime_types_inline']);
         $container->setParameter('sulu_media.disposition_type.mime_types_attachment', $config['disposition_type']['mime_types_attachment']);
 
+        // Services
+        $container->setParameter('sulu_media.external_service', $config['external_service']);
+
         // load services
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');

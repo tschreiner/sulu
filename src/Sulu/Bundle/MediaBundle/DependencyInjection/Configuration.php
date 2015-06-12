@@ -125,6 +125,12 @@ class Configuration implements ConfigurationInterface
                         ->prototype('scalar')->end()
                     ->end()
                 ->end()
+            ->end()
+            ->arrayNode('external_service')
+                ->useAttributeAsKey('name')
+                ->prototype('array')
+                    ->prototype('scalar')->end()
+                ->end()->defaultValue(array())
             ->end();
 
         return $treeBuilder;

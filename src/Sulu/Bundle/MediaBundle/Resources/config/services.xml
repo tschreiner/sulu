@@ -24,6 +24,7 @@
         <parameter key="sulu_media.twig_extension.disposition_type.class">Sulu\Bundle\MediaBundle\Twig\DispositionTypeTwigExtension</parameter>
         <parameter key="sulu_media.service.event_listener.class">Sulu\Bundle\MediaBundle\Media\Service\EventListener</parameter>
         <parameter key="sulu_media.media.service_manager.class">Sulu\Bundle\MediaBundle\Media\Service\ServiceManager</parameter>
+        <parameter key="sulu_media.external_service.class">Sulu\Bundle\MediaBundle\Media\Service\ExternalService</parameter>
     </parameters>
     <services>
         <service id="sulu_media.admin" class="%sulu_media.admin.class%">
@@ -140,5 +141,10 @@
         </service>
 
         <service id="sulu_media.media.service_manager" class="%sulu_media.media.service_manager.class%" />
+
+        <service id="sulu_media.external_service" class="%sulu_media.external_service.class%">
+            <argument>%sulu_media.external_service%</argument>
+            <argument type="service" id="jms_serializer" />
+        </service>
     </services>
 </container>
