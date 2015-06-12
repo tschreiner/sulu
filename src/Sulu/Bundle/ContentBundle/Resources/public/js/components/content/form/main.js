@@ -7,7 +7,7 @@
  * with this source code in the file LICENSE.
  */
 
-define(['sulucontent/components/content/preview/main'], function(Preview) {
+define(['app-config', 'sulucontent/components/content/preview/main'], function(AppConfig, Preview) {
 
     'use strict';
 
@@ -68,6 +68,7 @@ define(['sulucontent/components/content/preview/main'], function(Preview) {
             // get content data
             this.sandbox.emit('sulu.content.contents.get-data', function(data) {
                 this.render(data);
+                this.startCollaborationComponent();
             }.bind(this));
         },
 
@@ -450,6 +451,22 @@ define(['sulucontent/components/content/preview/main'], function(Preview) {
                 this.options.data = this.sandbox.util.extend(true, {}, this.options.data, data);
                 this.sandbox.emit('sulu.content.contents.save', data);
             }
+        },
+
+        startCollaborationComponent: function() {
+            var $container = this.sandbox.dom.createElement('<div id="content-column-collaboration"/>');
+            this.$el.append($container);
+            this.sandbox.start([
+                {
+                    name: 'content/collaboration-message@sulucontent',
+                    options: {
+                        el: $container,
+                        id: this.options.id,
+                        webspace: this.options.webspace,
+                        userId: AppConfig.getUser().id
+                    }
+                }
+            ]);
         }
     };
 });
