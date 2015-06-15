@@ -139,7 +139,7 @@ class CollaborationMessageHandler implements MessageHandlerInterface
 
     private function removeUser($id, $userId)
     {
-        if ($key = array_search(array('id' => $userId), $this->users[$id])) {
+        if (($key = array_search(array('id' => $userId), $this->users[$id])) !== false) {
             unset($this->users[$id][$key]);
         }
     }
