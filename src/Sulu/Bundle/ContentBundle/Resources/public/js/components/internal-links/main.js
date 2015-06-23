@@ -26,6 +26,9 @@ define([], function() {
             hidePositionElement: true,
             dataAttribute: 'internal-links',
             dataDefault: [],
+            navigateEvent: 'sulu.router.navigate',
+            webspace: null,
+            locale: null,
             translations: {
                 noContentSelected: 'internal-links.nolinks-selected',
                 addLinks: 'internal-links.add',
@@ -37,12 +40,16 @@ define([], function() {
         templates = {
             data: function(options) {
                 return [
-                    '<div id="', options.ids.columnNavigation, '"/>',
+                    '<div id="', options.ids.columnNavigation, '"/>'
                 ].join('');
             },
 
-            contentItem: function(value) {
-                return ['<span class="value">', value, '</span>'].join('');
+            contentItem: function(id, value) {
+                return [
+                    '<a href="#" data-id="', id, '" class="link">',
+                    '   <span class="value">', value, '</span>',
+                    '</a>'
+                ].join('');
             }
         },
 
@@ -65,6 +72,17 @@ define([], function() {
             this.sandbox.on('husky.column-navigation.' + this.options.instanceName + '.initialized', function() {
                 this.sandbox.emit('husky.overlay.internal-links.' + this.options.instanceName + '.add.set-position');
             }.bind(this));
+
+            this.sandbox.dom.on(this.$el, 'click', function(e) {
+                var id = this.sandbox.dom.data(e.currentTarget, 'id');
+
+                this.sandbox.emit(
+                    this.options.navigateEvent,
+                    'content/contents/' + this.options.webspace + '/' + this.options.locale + '/edit:' + id + '/details'
+                );
+
+                return false;
+            }.bind(this), 'a.link');
         },
 
         /**
@@ -181,7 +199,10 @@ define([], function() {
         },
 
         getItemContent: function(item) {
-            return templates.contentItem(item.title);
+            return templates.contentItem(
+                item[this.options.idKey],
+                item.title
+            );
         },
 
         sortHandler: function(ids) {
