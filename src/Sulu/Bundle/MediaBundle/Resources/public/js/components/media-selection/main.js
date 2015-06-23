@@ -23,6 +23,7 @@ define(['sulumedia/collection/collections', 'sulumedia/model/collection'], funct
             thumbnailSize: '50x50',
             resultKey: 'media',
             dataAttribute: 'media-selection',
+            navigateEvent: 'sulu.router.navigate',
             dataDefault: {
                 displayOption: 'top',
                 ids: []
@@ -126,10 +127,12 @@ define(['sulumedia/collection/collections', 'sulumedia/model/collection'], funct
                 return options.selectedCounter + ' ' + options.selectedImagesLabel;
             },
 
-            contentItem: function(title, thumbnails) {
+            contentItem: function(id, collection, title, thumbnails) {
                 return [
+                    '<a href="#" class="link" data-id="', id, '" data-collection="', collection, '">',
                     '   <img src="', thumbnails['50x50'], '"/>',
-                    '   <span class="title">', title, '</span>'
+                    '   <span class="title">', title, '</span>',
+                    '</a>'
                 ].join('');
             }
         },
@@ -430,6 +433,23 @@ define(['sulumedia/collection/collections', 'sulumedia/model/collection'], funct
                 );
                 updateSelectedCounter.call(this, data);
             }.bind(this));
+        },
+
+        /**
+         * Bind events to dom elements
+         */
+        bindDomEvents = function() {
+            this.sandbox.dom.on(this.$el, 'click', function(e) {
+                var id = this.sandbox.dom.data(e.currentTarget, 'id'),
+                    collection = this.sandbox.dom.data(e.currentTarget, 'collection');
+
+                this.sandbox.emit(
+                    this.options.navigateEvent,
+                    'media/collections/edit:' + collection + '/files/edit:' + id
+                );
+
+                return false;
+            }.bind(this), 'a.link');
         },
 
         /**
@@ -781,6 +801,7 @@ define(['sulumedia/collection/collections', 'sulumedia/model/collection'], funct
             this.uploadCollection = null;
 
             bindCustomEvents.call(this);
+            bindDomEvents.call(this);
 
             this.render();
 
@@ -808,7 +829,7 @@ define(['sulumedia/collection/collections', 'sulumedia/model/collection'], funct
         },
 
         getItemContent: function(item) {
-            return templates.contentItem(item.title, item.thumbnails);
+            return templates.contentItem(item.id, item.collection, item.title, item.thumbnails);
         },
 
         sortHandler: function(ids) {
