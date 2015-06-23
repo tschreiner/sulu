@@ -126,6 +126,8 @@ define([], function() {
             columnNavigationResultKey: 'nodes',
             titleKey: 'title',
             pathKey: 'path',
+            localeKey: 'locale',
+            webspaceKey: 'webspaceKey',
             translations: {},
             elementDataName: 'smart-content',
             externalConfigs: false,
@@ -194,8 +196,10 @@ define([], function() {
             ].join(''),
             contentItem: [
                 '<li data-id="<%= dataId %>">',
-                '   <span class="num"><%= num %></span>',
-                '   <span class="value"><%= value %></span>',
+                '   <a href="#" data-id="<%= dataId %>" data-webspace="<%= webspace %>" data-locale="<%= locale %>" class="link">',
+                '       <span class="num"><%= num %></span>',
+                '       <span class="value"><%= value %></span>',
+                '   </a>',
                 '</li>'
             ].join(''),
             overlayContent: {
@@ -382,6 +386,7 @@ define([], function() {
             this.renderStartContent();
             this.startOverlay();
             this.bindEvents();
+            this.bindDomEvents();
             this.setURI();
             this.loadContent();
 
@@ -559,6 +564,8 @@ define([], function() {
                     this.sandbox.dom.append(ul, _.template(templates.contentItem)({
                         dataId: this.items[i][this.options.idKey],
                         value: this.items[i][this.options.titleKey],
+                        locale:this.items[i][this.options.localeKey],
+                        webspace:this.items[i][this.options.webspaceKey],
                         num: (i + 1)
                     }));
                 }
@@ -667,6 +674,24 @@ define([], function() {
                 this.setURI();
                 this.loadContent();
             }.bind(this));
+        },
+
+        /**
+         * Binds dom events
+         */
+        bindDomEvents: function() {
+            this.sandbox.dom.on(this.$el, 'click', function(e) {
+                var id = this.sandbox.dom.data(e.currentTarget, 'id'),
+                    webspace = this.sandbox.dom.data(e.currentTarget, 'webspace'),
+                    locale = this.sandbox.dom.data(e.currentTarget, 'locale');
+
+                this.sandbox.emit(
+                    this.options.navigateEvent,
+                    'content/contents/' + webspace + '/' + locale + '/edit:' + id + '/details'
+                );
+
+                return false;
+            }.bind(this), 'a.link');
         },
 
         /**
