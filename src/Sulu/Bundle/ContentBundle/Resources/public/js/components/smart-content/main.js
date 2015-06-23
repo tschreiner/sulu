@@ -135,7 +135,8 @@ define([], function() {
             hideTags: false,
             hideSortBy: false,
             hideLimit: false,
-            title: 'Smart-Content'
+            title: 'Smart-Content',
+            navigateEvent: 'sulu.router.navigate'
         },
 
         sortMethods = {
@@ -173,28 +174,28 @@ define([], function() {
         templates = {
             skeleton: [
                 '<div class="white-box smart-content-container form-element">',
-                '<div class="header"></div>',
-                '<div class="content"></div>',
+                '   <div class="header"></div>',
+                '   <div class="content"></div>',
                 '</div>'
             ].join(''),
             source: [
                 '<span class="text">',
-                '<span class="source">',
-                '<span class="desc"><%= desc %></span>',
-                '<span class="val"><%= val %></span>',
-                '</span>',
+                '   <span class="source">',
+                '       <span class="desc"><%= desc %></span>',
+                '       <span class="val"><%= val %></span>',
+                '   </span>',
                 '</span>'
             ].join(''),
             noContent: [
                 '<div class="no-content">',
-                '<span class="fa-coffee icon"></span>',
-                '<div class="text"><%= noContentStr %></div>',
+                '   <span class="fa-coffee icon"></span>',
+                '   <div class="text"><%= noContentStr %></div>',
                 '</div>'
             ].join(''),
             contentItem: [
                 '<li data-id="<%= dataId %>">',
-                '<span class="num"><%= num %></span>',
-                '<span class="value"><%= value %></span>',
+                '   <span class="num"><%= num %></span>',
+                '   <span class="value"><%= value %></span>',
                 '</li>'
             ].join(''),
             overlayContent: {
@@ -205,9 +206,11 @@ define([], function() {
 
                 dataSource: [
                     '<div class="item-half left">',
-                    '<span class="desc"><%= dataSourceLabelStr %></span>',
-                    '<div class="btn action fit" id="select-data-source-action"><%= dataSourceButtonStr %></div>',
-                    '<div><span class="sublabel"><%= dataSourceLabelStr %>:</span> <span class="sublabel data-source"><%= dataSourceValStr %></span></div>',
+                    '   <span class="desc"><%= dataSourceLabelStr %></span>',
+                    '   <div class="btn action fit" id="select-data-source-action"><%= dataSourceButtonStr %></div>',
+                    '   <div>',
+                    '       <span class="sublabel"><%= dataSourceLabelStr %>:</span> <span class="sublabel data-source"><%= dataSourceValStr %></span>',
+                    '   </div>',
                     '</div>'
                 ].join(''),
 
