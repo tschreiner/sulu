@@ -1312,11 +1312,11 @@ class ContentMapperTest extends SuluTestCase
     {
         $this->prepareTreeTestData();
 
-        $result = $this->mapper->loadBySql2('SELECT * FROM [sulu:content]', 'de', 'sulu_io');
+        $result = $this->mapper->loadBySql2('SELECT * FROM [nt:base] WHERE [jcr:mixinTypes] = "sulu:page"', 'de', 'sulu_io');
 
-        $this->assertEquals(5, sizeof($result));
+        $this->assertEquals(4, sizeof($result));
 
-        $result = $this->mapper->loadBySql2('SELECT * FROM [sulu:content]', 'de', 'sulu_io', 2);
+        $result = $this->mapper->loadBySql2('SELECT * FROM [nt:base] WHERE [jcr:mixinTypes] = "sulu:page"', 'de', 'sulu_io', 2);
 
         $this->assertEquals(2, sizeof($result));
     }
