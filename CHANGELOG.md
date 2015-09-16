@@ -2,6 +2,7 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * FEATURE     #1347 [ContactBundle]   Content type for contacts and accounts
     * FEATURE     #1558 [AdminBundle]     Redesign of overlays
     * FEATURE     #1557 [MediaBundle]     Redesign of data-navigation
     * FEATURE     #1557 [AdminBundle]     Success-labels in navigation
