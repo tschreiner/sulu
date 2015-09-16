@@ -2,6 +2,8 @@ CHANGELOG for Sulu
 ==================
 
 * dev-develop
+    * ENHANCEMENT #1581 [CategoryBundle]  Added locale handling in list and list api
+    * ENHANCEMENT #1581 [SnippetBundle]   Added locale chooser in list
     * FEATURE     #1558 [AdminBundle]     Redesign of overlays
     * FEATURE     #1557 [MediaBundle]     Redesign of data-navigation
     * FEATURE     #1557 [AdminBundle]     Success-labels in navigation
